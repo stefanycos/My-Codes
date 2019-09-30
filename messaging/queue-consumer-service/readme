@@ -1,1 +1,3 @@
 Example of a message consumer (listener) using Spring RabbitMQ.
+
+For start the application run: mvn spring-boot:run

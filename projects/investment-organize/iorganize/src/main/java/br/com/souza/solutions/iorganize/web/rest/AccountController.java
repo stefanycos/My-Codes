@@ -20,58 +20,62 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.souza.solutions.iorganize.commons.Constants;
-import br.com.souza.solutions.iorganize.models.InvestmentType;
-import br.com.souza.solutions.iorganize.service.InvestmentTypeService;
+import br.com.souza.solutions.iorganize.models.Account;
+import br.com.souza.solutions.iorganize.service.AccountService;
+import br.com.souza.solutions.iorganize.service.BankService;
 import br.com.souza.solutions.iorganize.utils.ObjectPropertyUtils;
-import br.com.souza.solutions.iorganize.web.rest.dto.InvestmentTypeDTO;
-import br.com.souza.solutions.iorganize.web.rest.form.InvestmentTypeForm;
-import br.com.souza.solutions.iorganize.web.rest.mapper.InvestmentTypeMapper;
+import br.com.souza.solutions.iorganize.web.rest.dto.AccountDTO;
+import br.com.souza.solutions.iorganize.web.rest.form.AccountForm;
+import br.com.souza.solutions.iorganize.web.rest.mapper.AccountMapper;
 
 @RestController
-@RequestMapping("v1/api/investment/types")
-public class InvestmentTypeController {
+@RequestMapping("v1/api/accounts")
+public class AccountController {
 
 	@Autowired
-	private InvestmentTypeService service;
+	private AccountService service;
+	
+	@Autowired
+	private BankService bankService;
 
 	@Autowired
-	private InvestmentTypeMapper mapper;
+	private AccountMapper mapper;
 
 	@GetMapping
-	public Page<InvestmentTypeDTO> get(@RequestParam(required = false) String status, Pageable pageable) {
+	public Page<AccountDTO> get(@RequestParam(required = false) String status, Pageable pageable) {
 
-		Page<InvestmentType> types = service.findAll(pageable, status);
-		return mapper.toInvestmentTypeDTO(types);
+		Page<Account> goals = service.findAll(pageable, status);
+		return mapper.toAccountDTO(goals);
 	}
 
 	@GetMapping("/{id}")
-	public InvestmentTypeDTO get(@PathVariable Long id) {
+	public AccountDTO get(@PathVariable Long id) {
 
-		InvestmentType type = service.findById(id)
+		Account account = service.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.NOT_FOUND_MESSAGE));
-		return new InvestmentTypeDTO(type);
+		return new AccountDTO(account);
 	}
 
 	@PostMapping
 	@Transactional
 	@ResponseStatus(HttpStatus.CREATED)
-	public InvestmentTypeDTO save(@RequestBody @Valid InvestmentTypeForm form) {
-		InvestmentType type = form.converter();
-		type = service.save(type);
+	public AccountDTO save(@RequestBody @Valid AccountForm form) {
+		Account account = form.converter(bankService);
+		account = service.save(account);
 
-		return new InvestmentTypeDTO(type);
+		return new AccountDTO(account);
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
-	public InvestmentTypeDTO update(@PathVariable Long id, @RequestBody InvestmentTypeForm form) {
+	public AccountDTO update(@PathVariable Long id, @RequestBody AccountForm form) {
 
-		InvestmentType type = service.findById(id)
+		Account account = service.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.NOT_FOUND_MESSAGE));
 
-		ObjectPropertyUtils.copyNonNullProperties(form, type);
+		ObjectPropertyUtils.copyNonNullProperties(form, account);
 
-		return new InvestmentTypeDTO(type);
+		return new AccountDTO(account);
 	}
 
 	@DeleteMapping("/{id}")
@@ -79,10 +83,10 @@ public class InvestmentTypeController {
 	@Transactional
 	public void delete(@PathVariable Long id) {
 
-		InvestmentType type = service.findById(id)
+		Account account = service.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.NOT_FOUND_MESSAGE));
 
-		service.disable(type);
+		service.disable(account);
 	}
 
 }

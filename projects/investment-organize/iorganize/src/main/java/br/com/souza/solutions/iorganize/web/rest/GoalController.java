@@ -28,7 +28,7 @@ import br.com.souza.solutions.iorganize.web.rest.form.GoalForm;
 import br.com.souza.solutions.iorganize.web.rest.mapper.GoalMapper;
 
 @RestController
-@RequestMapping("v1/api/goal")
+@RequestMapping("v1/api/goals")
 public class GoalController {
 
 	@Autowired

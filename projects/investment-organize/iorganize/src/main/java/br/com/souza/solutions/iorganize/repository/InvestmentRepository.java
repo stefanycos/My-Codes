@@ -5,11 +5,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.souza.solutions.iorganize.models.Account;
+import br.com.souza.solutions.iorganize.models.Investment;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
-	
-	Page<Account> findByStatus(Pageable pageable, boolean status);
-	
+public interface InvestmentRepository extends JpaRepository<Investment, Long> {
+
+	Page<Investment> findByStatus(Pageable pageable, boolean status);
+
 }

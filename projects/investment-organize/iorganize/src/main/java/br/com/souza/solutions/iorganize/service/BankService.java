@@ -37,7 +37,7 @@ public class BankService {
 	}
 
 	public Bank findByName(String name) {
-		return repository.findByName(name).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bank named " + name +  " not found"));
+		return repository.findByName(name).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bank named [" + name +  "] not found"));
 	}
 
 	public void disable(Bank bank) {

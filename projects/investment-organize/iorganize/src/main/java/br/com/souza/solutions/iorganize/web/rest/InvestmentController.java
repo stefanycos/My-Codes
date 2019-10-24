@@ -20,63 +20,71 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.souza.solutions.iorganize.commons.Constants;
-import br.com.souza.solutions.iorganize.models.Account;
-import br.com.souza.solutions.iorganize.service.AccountService;
+import br.com.souza.solutions.iorganize.models.Investment;
 import br.com.souza.solutions.iorganize.service.BankService;
+import br.com.souza.solutions.iorganize.service.GoalService;
+import br.com.souza.solutions.iorganize.service.InvestmentService;
+import br.com.souza.solutions.iorganize.service.InvestmentTypeService;
 import br.com.souza.solutions.iorganize.utils.ObjectPropertyUtils;
-import br.com.souza.solutions.iorganize.web.rest.dto.AccountDTO;
-import br.com.souza.solutions.iorganize.web.rest.form.AccountForm;
-import br.com.souza.solutions.iorganize.web.rest.mapper.AccountMapper;
+import br.com.souza.solutions.iorganize.web.rest.dto.InvestmentDTO;
+import br.com.souza.solutions.iorganize.web.rest.form.InvestmentForm;
+import br.com.souza.solutions.iorganize.web.rest.mapper.InvestmentMapper;
 
 @RestController
-@RequestMapping("v1/api/accounts")
-public class AccountController {
+@RequestMapping("v1/api/investments")
+public class InvestmentController {
 
 	@Autowired
-	private AccountService service;
+	private InvestmentService service;
+	
+	@Autowired
+	private GoalService goalService;
+	
+	@Autowired
+	private InvestmentTypeService investmentTypeService;
 	
 	@Autowired
 	private BankService bankService;
 
 	@Autowired
-	private AccountMapper mapper;
+	private InvestmentMapper mapper;
 
 	@GetMapping
-	public Page<AccountDTO> get(@RequestParam(required = false) String status, Pageable pageable) {
+	public Page<InvestmentDTO> get(@RequestParam(required = false) String status, Pageable pageable) {
 
-		Page<Account> goals = service.findAll(pageable, status);
-		return mapper.toAccountDTO(goals);
+		Page<Investment> investments = service.findAll(pageable, status);
+		return mapper.toInvestmentDTO(investments);
 	}
 
 	@GetMapping("/{id}")
-	public AccountDTO get(@PathVariable Long id) {
+	public InvestmentDTO get(@PathVariable Long id) {
 
-		Account account = service.findById(id)
+		Investment investment = service.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.NOT_FOUND_MESSAGE));
-		return new AccountDTO(account);
+		return new InvestmentDTO(investment);
 	}
 
 	@PostMapping
 	@Transactional
 	@ResponseStatus(HttpStatus.CREATED)
-	public AccountDTO save(@RequestBody @Valid AccountForm form) {
-		Account account = form.converter(bankService);
-		account = service.save(account);
+	public InvestmentDTO save(@RequestBody @Valid InvestmentForm form) {
+		Investment investment = form.converter(investmentTypeService, goalService, bankService);
+		investment = service.save(investment);
 
-		return new AccountDTO(account);
+		return new InvestmentDTO(investment);
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
-	public AccountDTO update(@PathVariable Long id, @RequestBody AccountForm form) {
+	public InvestmentDTO update(@PathVariable Long id, @RequestBody InvestmentForm form) {
 
-		Account account = service.findById(id)
+		Investment investment = service.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.NOT_FOUND_MESSAGE));
 
-		ObjectPropertyUtils.copyNonNullProperties(form, account);
-		form.updateRelatedEntities(account, bankService);
+		ObjectPropertyUtils.copyNonNullProperties(form, investment);
+		form.updateRelatedEntities(investment, investmentTypeService, goalService, bankService);
 		
-		return new AccountDTO(account);
+		return new InvestmentDTO(investment);
 	}
 
 	@DeleteMapping("/{id}")
@@ -84,10 +92,10 @@ public class AccountController {
 	@Transactional
 	public void delete(@PathVariable Long id) {
 
-		Account account = service.findById(id)
+		Investment investment = service.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constants.NOT_FOUND_MESSAGE));
 
-		service.disable(account);
+		service.disable(investment);
 	}
 
 }

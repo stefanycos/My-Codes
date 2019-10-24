@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ErrorResponse implements Serializable {
+public class ErrorDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class ErrorResponse implements Serializable {
 
 	private String path;
 
-	public ErrorResponse(HttpStatus httpStatus) {
+	public ErrorDTO(HttpStatus httpStatus) {
 		timestamp = LocalDateTime.now();
 		status = httpStatus.value();
 		error = httpStatus.getReasonPhrase();

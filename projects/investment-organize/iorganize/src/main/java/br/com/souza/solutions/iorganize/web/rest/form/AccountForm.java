@@ -26,11 +26,19 @@ public class AccountForm {
 	private Boolean status;
 	
 	public Account converter(BankService bankService) {
-		Bank response = bankService.findByName(bank);
+		Bank bankName = bankService.findByName(bank);
 		return Account.builder()
-				.bank(response)
+				.bank(bankName)
 				.agency(agency)
 				.number(number)
 				.status(true).build();
+	}
+	
+	public void updateRelatedEntities(Account account, BankService bankService) {
+
+		if (bank != null) {
+			account.setBank(bankService.findByName(bank));
+		}
+
 	}
 }

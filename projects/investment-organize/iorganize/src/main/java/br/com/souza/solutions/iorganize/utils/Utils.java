@@ -3,6 +3,8 @@ package br.com.souza.solutions.iorganize.utils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import br.com.souza.solutions.iorganize.commons.Constants;
 
 public class Utils {
@@ -21,6 +23,10 @@ public class Utils {
 	public static LocalDateTime getDateFromString(String date) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
 		return LocalDateTime.parse(date, formatter);
+	}
+	
+	public static String encodePassword(String password) {
+		return new BCryptPasswordEncoder().encode(password);
 	}
 
 }

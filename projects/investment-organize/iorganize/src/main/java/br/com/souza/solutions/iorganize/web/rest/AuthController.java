@@ -27,7 +27,7 @@ public class AuthController {
 	private JwtTokenProvider jwtTokenProvider;
 	
 	@PostMapping
-	public AuthAccessToken authenticate(@RequestBody @Valid LoginForm form) throws AuthenticationException{
+	public AuthAccessToken authenticate(@RequestBody @Valid LoginForm form) throws AuthenticationException {
 		UsernamePasswordAuthenticationToken authentication = form.converter();
 		
 		Authentication authenticate = authManager.authenticate(authentication);

@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.com.souza.solutions.iorganize.security.AuthTokenFilter;
+import br.com.souza.solutions.iorganize.security.JwtTokenProvider;
+import br.com.souza.solutions.iorganize.service.auth.UserService;
 
 @EnableWebSecurity
 @Configuration
@@ -18,6 +23,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthenticationService authenticationService;
+	
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Override
 	@Bean
@@ -34,10 +45,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/v1/api/auth/").permitAll()
+			.antMatchers(HttpMethod.POST, "/v1/api/users/").permitAll()
 			.anyRequest().authenticated()
 			.and()
 				.csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+				.addFilterBefore(new AuthTokenFilter(jwtTokenProvider, userService), UsernamePasswordAuthenticationFilter.class);
 		
 	}
 	

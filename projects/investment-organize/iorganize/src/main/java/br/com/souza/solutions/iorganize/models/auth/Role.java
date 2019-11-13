@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Role implements GrantedAuthority{
+public class Role implements GrantedAuthority {
 
 	/**
 	 * 
@@ -22,10 +22,10 @@ public class Role implements GrantedAuthority{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String name;
+	private RoleType roleType;
 
 	@Override
 	public String getAuthority() {
-		return this.name;
+		return this.roleType.name();
 	}
 }

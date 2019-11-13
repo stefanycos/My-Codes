@@ -1,6 +1,5 @@
 package br.com.souza.solutions.iorganize.models.auth;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,10 +13,16 @@ import javax.persistence.ManyToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User implements UserDetails {
 
 	/**
@@ -36,7 +41,9 @@ public class User implements UserDetails {
 	private String systemPassword;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
-	private List<Role> roles = new ArrayList<>();
+	private List<Role> roles;
+	
+	private Boolean status;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

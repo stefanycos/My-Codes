@@ -1,0 +1,7 @@
+Project: RabbitMQ Manager 
+The project aim is to manager RabbitMQ queues, exchanges, hosts an so on, management is done over the RabbitMQ's Rest API.
+
+For start the application run: mvn spring-boot:run
+For access the application and send a message access: http://localhost:8086/swagger-ui.html
+
+Note: RabbitMQ needs to be running.

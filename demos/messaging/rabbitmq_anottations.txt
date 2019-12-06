@@ -1,0 +1,86 @@
+Installing RabbitMQ
+-- download and install erlang
+-- download and install RabbitMQ
+-- start RabbitMQ by running: rabbitmq-service.bat start
+    --- located in sbin directory inside RabbitMQ installation
+-- enable management plugin, to abilitate UI and monitoring interfaces, by running: rabbitmq-plugins enable rabbitmq_management
+   --- inside sbin directory inside RabbitMQ installation
+
+Messaging
+** Provides a mechanism for loosely-coupled integration of software or application components, system and even multiple system together.
+** Tytpical software message contains at least a header and a body.
+
+Messaging Protocols
+** Are the way the messages are transported from on application to another, through the network.
+** Most uded protocols are: STOMP, MQTT and AMQP.
+	*** STOMP (Simple Text-Oriented Messaging Protocol) - designed to exchange simple text messages, is interoperable.
+	Simple and easy to implement, besids do not deal with concepts like queues and topics, just uses a SEND semantic with a "destinantion" string for where the message should be delivered. However the receiver can implement queues, topics and exchanges.
+	*** MQTT (Message Queue Telemetry Transport) - Machine-to-machine (M2M) connectivity protocol, simply publis-subscribe messaging, can be used to comunicated with old devices, high latency networks such as dial up lines and satellite links. Supports thousands of concurrent device connections, compact binary packets, no message properties, headers are compressed. AWS IoT and Greengrass edge-computing solutions are designed around MQTT.
+	*** AMQP (Advanced Message Queuing Protocol) -  Reliable and interoperable, highly standardized. Provides a wide range of features related to messaging, including reliable queuing, topic-based, publish-and-subscribe messaging, flexble routing, transactions, and security.
+		** Real time of constantly updating information
+		** Encrypted assured transaction
+		** Message delivered when the destination comes online
+		** Enormous message while still receiving status updates over connection
+	
+RabbitMQ
+
+** Poweful Open Source message broker (message-oriented middleware).
+** Most popular implementation of AMQP.
+** Provides a robust and flexible messaging plataform designed to interoperate with messaging systems.
+** Developed using Erlang programming language.
+** Supports clustering for fault tolerence and scalability.
+** Defines exchange, queus and bindings.
+** Allows multiple connection channels inside a single TCP connection in order to remove the overhead of opening a large number of TCP conncetions to the message broker.
+
+
+4 Actors of Messaging with RabbitMQ
+
+	Producer - sends message to default or customized exchanges 
+	Exchange - from the exchange the message is routed (routes can be default or customized)
+	Queue - here the messages are pilled up to be sent to the consumers
+	Consumer - receive the message
+
+Exchange 
+** actual AMQP elements where messages are sent at first
+** take a message and routes it into one or more queues
+** routing algorithm decides where to send messages from exchange
+** routing algorithms depends on the exchange type and rules called "bindings"
+** bindings are simply used to bind exchanges to queues for message delivery
+
+*** Exchange types
+	** Direct (default exchange, is where the messages are delivery when no binding is configured )
+	** Fanout
+	** Topic
+	** Headers
+
+Queue
+** a core element in any MQ protocol especially for RabbitMQ.
+** messages are routed to queue from exchanges
+** are final destinations in RabbitMQ before being received by subcribers
+
+*** Queue properties
+	** Name - name of queue
+	** Durable - Either persist the queue to the disk or not
+	** Exclusive - Delete the queue if not used anymore
+	** Auto-Delete - Delete the queue when consumer unsubscribes
+
+Topic
+** are simply the "subject" part of the messages 
+** defined as routing_key for message grouping
+** Special formatting for better use
+ ** "app.logs.error"
+** optional parameters for message exchange
+** it is possible to send and receive messages without any topic information
+** topic exchange are defined using topics for message delivery
+
+Bindings
+** are rules that exchanges use to route messages to queues
+** to instruct an exchange E to route messages ti a queue K, K has to be bound to E!
+** may have an optional key attribute used by some exchange types
+** the routing key acts like a filter
+** if message ban not be routed to any queue (there are no bindings for the exchange it was published to) it is either dropped or returned to the publisher, depending on message attributes the publisher has set.
+
+
+Creating user: rabbitmqctl add_user username password
+Making user adminstrator: rabbitmqctl set_user_tags username administrator
+Setting permissions ("configure", "write", "read"): rabbitmqctl set_permissions -p / username ".*" ".*" ".*"

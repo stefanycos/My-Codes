@@ -5,8 +5,10 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 @Document(collection = InvestmentType.COLLECTION_NAME)
 public class InvestmentType {

@@ -1,6 +1,7 @@
 package br.com.souza.solutions.mongodb.demo.models;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,8 +9,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 @Document(collection = Investment.COLLECTION_NAME)
 public class Investment {
@@ -25,20 +28,19 @@ public class Investment {
 
 	@DBRef
 	@NotNull
-	private InvestmentType type;
+	private InvestmentType investmentType;
 
 	@DBRef
 	@NotNull
 	private Account account;
 
 	@DBRef
-	@NotNull
 	private User user;
 
 	@NotNull
-	private String applicationDate;
+	private LocalDateTime applicationDate;
 
-	private String dueDate;
+	private LocalDateTime dueDate;
 
 	@NotNull
 	private BigDecimal amount;

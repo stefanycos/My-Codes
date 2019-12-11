@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.souza.solutions.mongodb.demo.models.InvestmentType;
-import br.com.souza.solutions.mongodb.demo.models.InvestmentType;
-import br.com.souza.solutions.mongodb.demo.repository.BankRepository;
 import br.com.souza.solutions.mongodb.demo.repository.InvestmentTypeRepository;
 
 @Service

@@ -1,8 +1,8 @@
 # Demo project
 
 ### Operation
-Implementation of a example using events in Spring Boot. <br>
-When a Order pass to the next step, a event called changeStatus is generated, notifying all listeners waiting for that event.
+Implementation of an example using events in Spring Boot. <br>
+When an Order pass to the next step, an event called changeStatus is generated, notifying all listeners waiting for that event.
 
 ### Running application
 
